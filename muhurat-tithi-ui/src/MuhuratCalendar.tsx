@@ -1,389 +1,192 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-
-const locations = {
-  Maharashtra: ['Pune', 'Mumbai', 'Nagpur', 'Nashik'],
-  'Andhra Pradesh': ['Vijayawada'],
-  'Arunachal Pradesh': ['Itanagar'],
-  Assam: ['Dispur'],
-  Bihar: ['Patna'],
-  Chhattisgarh: ['Raipur'],
-  Goa: ['Panaji'],
-  Gujarat: ['Ahmedabad', 'Gandhinagar', 'Surat'],
-  Haryana: ['Chandigarh'],
-  'Himachal Pradesh': ['Shimla'],
-  Jharkhand: ['Ranchi'],
-  Karnataka: ['Bengaluru', 'Mysuru'],
-  Kerala: ['Thiruvananthapuram'],
-  'Madhya Pradesh': ['Bhopal'],
-  Manipur: ['Imphal'],
-  Meghalaya: ['Shillong'],
-  Mizoram: ['Aizawl'],
-  Nagaland: ['Kohima'],
-  Odisha: ['Bhubaneswar'],
-  Punjab: ['Chandigarh'],
-  Rajasthan: ['Jaipur'],
-  Sikkim: ['Gangtok'],
-  'Tamil Nadu': ['Chennai'],
-  Telangana: ['Hyderabad'],
-  Tripura: ['Agartala'],
-  'Uttar Pradesh': ['Lucknow'],
-  Uttarakhand: ['Dehradun'],
-  'West Bengal': ['Kolkata'],
-  'Andaman and Nicobar Islands': ['Sri Vijaya Puram'],
-  Chandigarh: ['Chandigarh'],
-  'Dadra and Nagar Haveli and Daman and Diu': ['Daman'],
-  Delhi: ['New Delhi'],
-  'Jammu and Kashmir': ['Srinagar', 'Jammu'],
-  Ladakh: ['Leh'],
-  Lakshadweep: ['Kavaratti'],
-  Puducherry: ['Puducherry'],
-}
-
-
-
-
-
-
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December',]
+const years = Array.from({ length: 101 },(_, index) => 2020 + index)
 function MuhuratCalendar() {
   const today = new Date()
-
   const [selectedDay, setSelectedDay] = useState(today.getDate())
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
-
-  const [selectedState, setSelectedState] = useState('Maharashtra')
-  const [selectedCity, setSelectedCity] = useState('Pune')
-
-
   const [apiMuhurats, setApiMuhurats] = useState<any[]>([])
   const [festivals, setFestivals] = useState<any[]>([])
   const [apiPanchang, setApiPanchang] = useState<any[]>([])
-
-  useEffect(() => {
-    const fetchMuhurats = async () => {
-      try {
-        const params = new URLSearchParams({
-          year: String(currentYear),
-          month: String(currentMonth + 1),
-          
-        })
-
-        const response = await fetch(
-          `http://localhost:8080/api/muhurats?${params}`
-        )
-
+  const [openDropdown, setOpenDropdown] = useState<'month' | 'year' | null>(null)
+    useEffect(() => {const fetchMuhurats = async () => {
+      if (!location) return
+      try {const params = new URLSearchParams({year: String(currentYear),month: String(currentMonth + 1),})
+        const response = await fetch(`http://localhost:8080/api/muhurats?${params}`)
         if (!response.ok) {
           throw new Error(`Backend error: ${response.status}`)
         }
-
         const data = await response.json()
-
-        setApiMuhurats(
-          Array.isArray(data?.muhurats)
-            ? data.muhurats
-            : []
-        )
+        setApiMuhurats(Array.isArray(data?.muhurats)? data.muhurats: [])
       } catch (error) {
         console.error('Failed to fetch Vivah Muhurats:', error)
         setApiMuhurats([])
       }
     }
-
-    fetchMuhurats()
-  }, [
-    currentYear,
-    currentMonth,
-    
-  ])
- useEffect(() => {
-  const fetchPanchang = async () => {
-    try {
+    fetchMuhurats()}, [currentYear,currentMonth])
+      useEffect(() => {
+      const fetchPanchang = async () => {
+         if (!location) return
+      try {
       const response = await fetch(
         `http://localhost:8080/api/muhurats/panchang?year=${currentYear}&month=${currentMonth + 1}`
       )
-
       if (!response.ok) {
         throw new Error(`Panchang API error: ${response.status}`)
       }
-
       const data = await response.json()
-
-      setApiPanchang(
-        Array.isArray(data?.days)
-          ? data.days
-          : []
-      )
+      setApiPanchang(Array.isArray(data?.days)? data.days: [])
     } catch (error) {
       console.error('Failed to fetch Panchang:', error)
       setApiPanchang([])
     }
   }
-
-  fetchPanchang()
-}, [currentYear, currentMonth])
-  useEffect(() => {
+  fetchPanchang()}, [currentYear, currentMonth])
+    useEffect(() => {
     const fetchFestivals = async () => {
       try {
         const response = await fetch(
           `http://localhost:8080/api/festivals?year=${currentYear}`
         )
-
         if (!response.ok) {
-          throw new Error(
-            `Festival API error: ${response.status}`
-          )
-        }
-
-        const data = await response.json()
-
-        console.log('Festival API:', data)
-
-        const festivalList =
-          Array.isArray(data?.festivals)
-            ? data.festivals
-            : Array.isArray(data?.data)
-              ? data.data
-              : Array.isArray(data)
-                ? data
-                : []
-
-        console.log('Festival List:', festivalList)
-
+          throw new Error(`Festival API error: ${response.status}`)}
+          const data = await response.json()
+          const festivalList =Array.isArray(data?.festivals)? data.festivals: Array.isArray(data?.data)? data.data: Array.isArray(data)? data: []
         setFestivals(festivalList)
       } catch (error) {
         console.error('Failed to fetch festivals:', error)
         setFestivals([])
       }
     }
-
-    fetchFestivals()
-  }, [currentYear])
-
-  const getFestivalDate = (festival: any) => {
-    return (
-      festival?.date ??
-      festival?.[`date_${currentYear}`] ??
-      festival?.festivalDate ??
-      festival?.eventDate ??
-      festival?.observanceDate ??
-      ''
-    )
+      fetchFestivals()
+      }, [currentYear])
+      const getFestivalDate = (festival: any) => {
+      return (festival?.date ?? festival?.[`date_${currentYear}`] ?? festival?.festivalDate ?? festival?.eventDate ?? festival?.observanceDate ??'')
   }
-
-  const getFestivalName = (festival: any) => {
-    return (
-      festival?.name ??
-      festival?.festival ??
-      festival?.title ??
-      festival?.displayName ??
-      festival?.event ??
-      'Festival'
-    )
+      const getFestivalName = (festival: any) => {
+      return (festival?.name ?? festival?.festival ?? festival?.title ?? festival?.displayName ?? festival?.event ??'Festival')
   }
-
-  const getFestivalForDate = (dateKey: string) => {
-    return festivals.find((festival: any) => {
+      const getFestivalForDate = (dateKey: string) => {
+      return festivals.find((festival: any) => {
       const festivalDate = getFestivalDate(festival)
-
-      return (
-        typeof festivalDate === 'string' &&
-        festivalDate.slice(0, 10) === dateKey
-      )
+      return (typeof festivalDate === 'string' && festivalDate.slice(0, 10) === dateKey)
     })
   }
-
-  const monthFestivals = festivals.filter((festival: any) => {
-    const date = getFestivalDate(festival)
-
-    if (!date) return false
-
-    const festivalDate = String(date).slice(0, 10)
-
-    return festivalDate.startsWith(
-      `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`
-    )
+      const monthFestivals = festivals.filter((festival: any) => {
+      const date = getFestivalDate(festival)
+      if (!date) return false
+      const festivalDate = String(date).slice(0, 10)
+      return festivalDate.startsWith(`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`)
+    })
+      const selectedDate = new Date(currentYear,currentMonth,selectedDay)
+      const selectedDateKey = [currentYear,String(currentMonth + 1).padStart(2, '0'),String(selectedDay).padStart(2, '0'),].join('-')
+      const selectedMuhurat = apiMuhurats.find((muhurat: any) => muhurat.date === selectedDateKey)
+      const getPanchangForDate = (date: Date) => {
+      const dateKey = [date.getFullYear(),String(date.getMonth() + 1).padStart(2, '0'),String(date.getDate()).padStart(2, '0'),].join('-')
+      return apiPanchang.find((day: any) => day.date === dateKey)
+  }
+      const selectedFestival = festivals.find((festival: any) => {
+      const festivalDate = getFestivalDate(festival)
+      return (typeof festivalDate === 'string' && festivalDate.slice(0, 10) === selectedDateKey)
   })
-
-  
-
-  const selectedDate = new Date(
-    currentYear,
-    currentMonth,
-    selectedDay
-  )
-
-  const selectedDateKey = [
-    currentYear,
-    String(currentMonth + 1).padStart(2, '0'),
-    String(selectedDay).padStart(2, '0'),
-  ].join('-')
-       const selectedMuhurat = apiMuhurats.find(
-  (muhurat: any) => muhurat.date === selectedDateKey
-)
- const getPanchangForDate = (date: Date) => {
-  const dateKey = [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0'),
-  ].join('-')
-
-  return apiPanchang.find(
-    (day: any) => day.date === dateKey
-  )
-}
-  const selectedFestival = festivals.find((festival: any) => {
-    const festivalDate = getFestivalDate(festival)
-
-    return (
-      typeof festivalDate === 'string' &&
-      festivalDate.slice(0, 10) === selectedDateKey
-    )
-  })
-
-  const panchang = getPanchangForDate(selectedDate)
-
-  
-
-
-  return (
-
-    <div className="page">
-
+      const panchang = getPanchangForDate(selectedDate)
+      return (
+      <div className="page">
       <header className="navbar">
-
         <div className="brand">
-
-          <div className="brand-icon">♧</div>
-
-          <span>
-
-            <strong>BookMy</strong><b>Hall</b>
-
-          </span>
-
+        <div className="brand-icon">♧</div>
+          <span><strong>BookMy</strong><b>Hall</b></span>
         </div>
-
-        <nav>
-
-          <a>Home</a>
-
-          <a>Browse Venues</a>
-
-          <a>✨ AI Planner</a>
-
-          <a className="active">🗓️ Muhurat & Tithi</a>
-
-          <a>📢 Advertise</a>
-
-          <a>How It Works</a>
-
-        </nav>
-
+          <nav>
+            <a>Home</a>
+            <a>Browse Venues</a>
+            <a>✨ AI Planner</a>
+            <a className="active">🗓️ Muhurat & Tithi</a>
+            <a>📢 Advertise</a>
+            <a>How It Works</a>
+          </nav>
         <div className="nav-right">
-
           <button className="sign-in">Sign In</button>
-
           <button className="menu">☰</button>
-
         </div>
-
       </header>
-
       <section className="hero-section">
-
-        <div className="tag">✧ &nbsp; HINDU PANCHANG & TITHI</div>
-
-        <h1>
-
-          Auspicious <span>Vivah Muhurat</span> & Tithi Calendar
-
-        </h1>
-
-        <p>
-
-          Select the most auspicious dates for your wedding, engagement,
-
-          and celebrations with complete Hindu Panchang details.
-
-        </p>
-
+        <div className="tag"> &nbsp; HINDU PANCHANG & TITHI</div>
+        <h1>Auspicious <span>Vivah Muhurat</span> & Tithi Calendar</h1>
+        <p>Select the most auspicious dates for your wedding, engagement,
+          and celebrations with complete Hindu Panchang details.</p>
       </section>
-
       <main className="content">
+      <section className="calendar-card">
+        <div className="calendar-header">
+        <div className="calendar-title">
+          <span className="calendar-icon"></span>
+            <div className="month-year-selector">
+            {/* MONTH */}
+            <div className="custom-dropdown">
+            <button type="button" className="custom-dropdown-button" onClick={() =>setOpenDropdown(openDropdown === 'month' ? null : 'month')}>
+            <span>{months[currentMonth]}</span>
+            <span className="dropdown-arrow">⌄</span>
+            </button>
+              {openDropdown === 'month' && (
+        <div className="custom-dropdown-menu">
+          {months.map((month, index) => (
+            <button
+              type="button"
+              key={month}
+              className="custom-dropdown-option"
+              onClick={() => {
+                setCurrentMonth(index)
+                setSelectedDay(1)
+                setOpenDropdown(null)
+              }}
+            >
+              {month}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
 
-        <section className="calendar-card">
+    {/* YEAR */}
+    <div className="custom-dropdown">
+      <button
+        type="button"
+        className="custom-dropdown-button"
+        onClick={() =>
+          setOpenDropdown(
+            openDropdown === 'year' ? null : 'year'
+          )
+        }
+      >
+        <span>{currentYear}</span>
+        <span className="dropdown-arrow">⌄</span>
+      </button>
 
-            <div className="location-selector">
+      {openDropdown === 'year' && (
+        <div className="custom-dropdown-menu">
+          {years.map((year) => (
+            <button
+              type="button"
+              key={year}
+              className="custom-dropdown-option"
+              onClick={() => {
+                setCurrentYear(year)
+                setSelectedDay(1)
+                setOpenDropdown(null)
+              }}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
 
-  <select
-
-    value={selectedState}
-
-    onChange={(e) => {
-
-      const state = e.target.value
-
-      setSelectedState(state)
-
-      const firstCity =
-  locations[state as keyof typeof locations][0]
-
-      setSelectedCity(firstCity)
-
-    }}
-
-  >
-
-    {Object.keys(locations).map((state) => (
-
-      <option key={state} value={state}>
-
-        {state}
-
-      </option>
-
-    ))}
-
-  </select>
-
-  <select
-
-    value={selectedCity}
-
-    onChange={(e) => setSelectedCity(e.target.value)}
-
-  >
-
-    {locations[selectedState as keyof typeof locations].map((city) => (
-
-      <option key={city} value={city}>
-
-        {city}
-
-      </option>
-
-    ))}
-
-  </select>
-
+  </div>
 </div>
-
-          <div className="calendar-header">
-
-            <h2>
-
-  ▣ &nbsp;
-
-  {new Date(currentYear, currentMonth).toLocaleDateString('en-US', {
-
-    month: 'long',
-
-    year: 'numeric',
-
-  })}
-
-</h2>
 
             <div className="calendar-actions">
 
@@ -413,28 +216,7 @@ function MuhuratCalendar() {
 
   </button>
 
-  <button
-
-  className="today"
-
-  onClick={() => {
-
-    const today = new Date()
-
-    setCurrentMonth(today.getMonth())
-
-    setCurrentYear(today.getFullYear())
-
-    setSelectedDay(today.getDate())
-
-  }}
-
->
-
-  Today
-
-</button>
-
+  
   <button
 
     onClick={() => {
@@ -588,15 +370,7 @@ const festivalName =
 
           </div>
 
-          <div className="legend">
-
-            <span><i className="legend-a">◉</i> Shubh Vivah Muhurat</span>
-
-            <span><i className="legend-b"></i> Selected Date</span>
-
-            <span><i className="legend-c">●</i> Major Festival</span>
-
-          </div>
+          
 
           <div className="details-card">
 
@@ -739,7 +513,7 @@ const festivalName =
 
       <div>
         <h3>Key Muhurats & Festivals</h3>
-        <p>Important dates for this month</p>
+        
       </div>
     </div>
 
