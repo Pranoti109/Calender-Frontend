@@ -1,0 +1,969 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #172033;
+  background: #fff;
+}
+
+button {
+  font-family: inherit;
+}
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fff8fb 0, #ffffff 420px);
+}
+
+/* Navbar */
+
+.navbar {
+  width: 100%;
+  min-height: 82px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.brand {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 27px;
+  white-space: nowrap;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 22px;
+  background: linear-gradient(135deg, #e72d87, #5c42d8);
+  box-shadow: 0 5px 12px rgba(100, 50, 180, 0.2);
+}
+
+.brand strong {
+  color: #674395;
+}
+
+.brand b {
+  color: #172033;
+}
+
+/* Navigation */
+.navbar nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.navbar nav a {
+  padding: 10px 11px;
+  border-radius: 10px;
+  color: #485b75;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.navbar nav a.active {
+  background: #fff0f4;
+  color: #d81755;
+  font-weight: 700;
+}
+
+/* Right side */
+.nav-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+.sign-in {
+  border: 0;
+  background: transparent;
+  padding: 9px 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #172033;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sign-in:hover {
+  color: #d81755;
+}
+
+.menu {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border: 1px solid #e2e7ef;
+  border-radius: 13px;
+  background: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+/* Hero */
+
+.hero-section {
+  text-align: center;
+  padding: 66px 20px 92px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 9px 20px;
+  border: 1px solid #bfc9f4;
+  border-radius: 25px;
+  background: #f4f5ff;
+  color: #343ca7;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.hero-section h1 {
+  margin: 22px auto 12px;
+  max-width: 1100px;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1.1;
+  color: #050505;
+}
+
+.hero-section h1 span {
+  background: linear-gradient(90deg, #5036bc, #c1497d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-section p {
+  max-width: 850px;
+  margin: auto;
+  color: #405879;
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+/* Main */
+
+.content {
+  width: min(100% - 48px, 1280px);
+  max-width: 1280px;
+  margin: 0 auto 50px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.calendar-card {
+  background: white;
+  border: 1px solid #f3dfea;
+  border-radius: 30px;
+  padding: 30px;
+  box-shadow: 0 3px 15px rgba(60, 30, 70, 0.05);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 26px;
+  color: #10151d;
+}
+
+.calendar-header h2:first-letter {
+  color: #f21982;
+}
+
+.calendar-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.calendar-actions button {
+  min-width: 48px;
+  height: 46px;
+  border: 1px solid #f3dce9;
+  border-radius: 15px;
+  background: white;
+  color: #344b65;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.calendar-actions .today {
+  min-width: 82px;
+  background: #fff1f7;
+  color: #e31d69;
+  border-color: #fff1f7;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Calendar */
+
+.weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 9px;
+}
+
+.weekdays {
+  margin-bottom: 10px;
+}
+
+.weekdays span {
+  text-align: center;
+  font-weight: 700;
+  color: #59708e;
+  padding: 8px 0;
+}
+
+.weekdays .sunday {
+  color: #f01835;
+}
+
+.calendar-grid {
+  row-gap: 9px;
+}
+
+.date-box {
+  width: 100%;
+  min-width: 0;
+  min-height: 95px;
+  border: 1px solid #e7edf4;
+  border-radius: 14px;
+  background: white;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  color: #152238;
+  overflow: hidden;
+}
+
+button.date-box {
+  font-size: inherit;
+}
+
+.date-box:hover {
+  border-color: #ff5ba3;
+}
+
+.date-box strong {
+  max-width: 100%;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+
+.date-box small {
+  max-width: 100%;
+  text-align: center;
+  color: #536c8a;
+  font-size: 12px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date-box.muted {
+  background: #fbfcfd;
+  border-color: transparent;
+}
+
+.date-box.muted strong,
+.date-box.muted small {
+  color: #c6ccd5;
+}
+
+.date-box.selected {
+  border: 2px solid #ff4d9a;
+  box-shadow: 0 0 0 2px #ffe2ee;
+}
+
+.date-box.selected strong {
+  color: #df0960;
+}
+
+.legend {
+  display: flex;
+  gap: 28px;
+  padding: 24px 0 30px;
+  margin-top: 20px;
+  border-top: 1px solid #edf0f4;
+  color: #4e6682;
+  font-size: 15px;
+}
+
+.legend i {
+  font-style: normal;
+  margin-right: 7px;
+}
+
+.legend-a {
+  color: #ffc928;
+}
+
+.legend-b {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ff57a0;
+  border-radius: 5px;
+  vertical-align: middle;
+}
+
+.legend-c {
+  color: #921de6;
+}
+
+/* Details */
+
+.details-card {
+  border: 1px solid #f1dce8;
+  border-radius: 25px;
+  padding: 27px;
+  box-shadow: 0 3px 10px rgba(80, 30, 80, 0.05);
+}
+
+.details-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.details-heading p {
+  margin: 0 0 8px;
+  color: #e3126c;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.details-heading h2 {
+  margin: 0;
+  color: #111820;
+  font-size: 24px;
+}
+
+.day-badge {
+  padding: 9px 17px;
+  border: 1px solid #dce5ee;
+  border-radius: 20px;
+  color: #38516c;
+  background: #f9fbfd;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  padding-top: 22px;
+}
+
+.detail-box {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 18px;
+  min-height: 120px;
+}
+
+.detail-box label {
+  display: block;
+  color: #8ca2bd;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.detail-box strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.35;
+  color: #152238;
+}
+
+.detail-box small {
+  display: block;
+  margin-top: 7px;
+  color: #f21c73;
+  font-size: 13px;
+}
+
+.detail-box small.green {
+  color: #00a24b;
+}
+
+.detail-box small.orange {
+  color: #e67b00;
+}
+
+.detail-box small.purple {
+  color: #8a20dc;
+}
+
+/* Sidebar */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.muhurat-card {
+  padding: 28px;
+  border: 1px solid #f0d991;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #fffdf1, #fff8e9);
+  box-shadow: 0 3px 12px rgba(170, 130, 30, 0.08);
+}
+
+.sidebar-title {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ring {
+  font-size: 31px;
+}
+
+.sidebar-title h2 {
+  margin: 0 0 5px;
+  font-size: 21px;
+  color: #12171d;
+}
+
+.sidebar-title p {
+  margin: 0;
+  color: #d35b0c;
+  font-size: 15px;
+}
+
+.muhurat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.muhurat-item {
+  padding: 17px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #f3e3bd;
+  border-radius: 17px;
+  box-shadow: 0 2px 5px rgba(100, 70, 10, 0.04);
+}
+
+.muhurat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.muhurat-top strong {
+  font-size: 18px;
+  color: #121c2a;
+}
+
+.muhurat-top span {
+  background: #fff0bd;
+  color: #a34d00;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.muhurat-item p {
+  margin: 9px 0 0;
+  color: #425a76;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.muhurat-item p b {
+  color: #142238;
+}
+
+.muhurat-item > small {
+  display: block;
+  margin-top: 7px;
+  color: #ec146b;
+  font-size: 13px;
+}
+
+.book-button {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #fa6b58, #f35e53);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 15px;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(244, 93, 80, 0.2);
+}
+
+/* Info */
+
+.info-card {
+  padding: 28px;
+  background: white;
+  border: 1px solid #f2dce8;
+  border-radius: 28px;
+}
+
+.info-card h2 {
+  margin: 0 0 25px;
+  font-size: 18px;
+  color: #111820;
+}
+
+.info-card p {
+  color: #405b78;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.info-card b {
+  color: #172238;
+}
+.date-box.shubh-muhurat {
+  border: 2px solid #e6a400;
+  background: #fff8df;
+  box-shadow: 0 0 0 2px #fff0b8;
+}
+
+.date-box.shubh-muhurat strong {
+  color: #b87900;
+}
+
+
+.date-box.sunday {
+  background: #fff0f0;
+  border-color: #ffcaca;
+}
+
+.date-box.sunday strong {
+  color: #d93636;
+}
+
+/* Festival name inside calendar date */
+
+.festival-label {
+  display: block;
+  width: 100%;
+  color: #7c3aed;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.shubh-label {
+  display: block;
+  color: #a86d00;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+/*location dropdown*/
+.location-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  width: 100%;
+}
+
+.location-selector select {
+  width: 200px;
+  height: 44px;
+  padding: 0 12px;
+
+  border: 1px solid #e2d9e1;
+  border-radius: 12px;
+
+  background-color: #fff;
+  color: #26364d;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  outline: none;
+
+  /* Small normal arrow */
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+}
+
+.location-selector select:hover {
+  border-color: #ff6aa9;
+}
+
+.location-selector select:focus {
+  border-color: #ff4d9a;
+  box-shadow: 0 0 0 3px rgba(255, 77, 154, 0.12);
+}
+
+.location-selector select:disabled {
+  background-color: #f7f7f8;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+.festival-day {
+  border-color: #e9a8d0;
+}
+
+.festival-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #c02688;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.legend-c {
+  color: #c02688;
+}
+.key-muhurats-card {
+  width: 100%;
+  padding: 22px 20px;
+  border: 1px solid #f2d36b;
+  border-radius: 24px;
+  background: #fffdf5;
+  box-sizing: border-box;
+}
+
+.key-muhurats-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+
+.key-muhurats-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.key-muhurats-header p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #f15a29;
+  line-height: 1.4;
+}
+
+.key-date-item {
+  background: #ffffff;
+  border: 1px solid #f1dfb2;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.key-date-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.key-date-top strong {
+  font-size: 14px;
+  color: #111827;
+}
+
+.key-date-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #fff1c7;
+  color: #b87900;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.key-date-info {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #27305d;
+  text-align: center;
+}
+
+.key-date-info span {
+  line-height: 1.4;
+}
+
+.festival-key-item {
+  border-color: #efb6d9;
+  background: #fff8fc;
+}
+
+.festival-date-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 11px;
+  border-radius: 20px;
+  background: #fce7f3;
+  color: #c02688;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.festival-key-name {
+  margin-top: 10px;
+  color: #c02688;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.no-key-dates {
+  padding: 18px 10px;
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+}
+
+.book-muhurat-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #ff665b;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.book-muhurat-btn:hover {
+  opacity: 0.92;
+}
+.festival-muhurat-item {
+  border-color: #efb6d9;
+  background: #fff8fc;
+}
+
+.festival-badge {
+  padding: 6px 10px;
+  border-radius: 15px;
+  background: #fce7f3;
+  color: #c02688;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.festival-name {
+  margin-top: 8px;
+  color: #c02688;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.no-muhurat-data {
+  padding: 15px;
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+}
+
+/*RESPONSIVE*/
+
+@media (max-width: 1150px) {
+  .navbar {
+    padding: 0 20px;
+    gap: 10px;
+  }
+
+  .navbar nav {
+    gap: 0;
+  }
+
+  .navbar nav a {
+    padding: 9px 7px;
+    font-size: 12px;
+  }
+
+  .brand {
+    font-size: 23px;
+  }
+
+  .nav-right {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar nav {
+    display: none;
+  }
+
+  .navbar {
+    padding: 0 18px;
+  }
+
+  .content {
+    width: calc(100% - 30px);
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-grid,
+  .weekdays {
+    gap: 5px;
+  }
+
+  .date-box {
+    min-height: 70px;
+    padding: 7px 4px;
+  }
+
+  .date-box strong {
+    font-size: 16px;
+  }
+
+  .date-box small {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .calendar-card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .calendar-header h2 {
+    font-size: 20px;
+  }
+
+  .calendar-grid,
+  .weekdays {
+    gap: 3px;
+  }
+
+  .date-box {
+    min-height: 58px;
+    border-radius: 9px;
+    padding: 6px 2px;
+  }
+
+  .date-box strong {
+    font-size: 14px;
+  }
+
+  .date-box small {
+    font-size: 8px;
+  }
+
+  .weekdays span {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 500px) {
+  .sign-in {
+    display: none;
+  }
+
+  .menu {
+    width: 45px;
+    height: 45px;
+    flex-basis: 45px;
+  }
+
+  .brand {
+    font-size: 21px;
+  }
+
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+}
+@media (max-width: 600px) {
+  .location-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .location-selector select {
+    width: 100%;
+  }
+  @media (max-width: 600px) {
+  .festival-label {
+    font-size: 7px;
+  }
+}
+@media (max-width: 480px) {
+  .festival-label {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+
+  .date-box.festival-day {
+    border-width: 1px;
+  }
+}
+}
